@@ -1,0 +1,12 @@
+div.stButton > button:first-child {
+    background-color: #2E86C1;
+    color: white;
+    border-radius: 8px;
+    height: 2.5em;
+    width: 100%;
+}
+div[data-testid="stExpander"] {
+    border: 1px solid #D6EAF8;
+    border-radius: 8px;
+    padding: 5px;
+}
