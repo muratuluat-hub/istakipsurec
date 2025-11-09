@@ -134,11 +134,15 @@ def delete_old_completed_tasks(db_name="tasks.db"):
 
         # 30 günden eski tamamlanmış görevleri sil
         thirty_days_ago = (datetime.now() - timedelta(days=30)).strftime('%Y-%m-%d')
+
         c.execute("""
             DELETE FROM tasks
-            WHERE status='Tamamlandı' 
-            AND due_date <= ?
-        """, (thirty_days_ago,))
+            WHERE status='Tamamlandı'
+            AND (
+                (due_date IS NOT NULL AND date(due_date) <= date(?))
+                OR (completed_date IS NOT NULL AND date(completed_date) <= date(?))
+            )
+        """, (thirty_days_ago, thirty_days_ago))
 
         deleted = c.rowcount
         conn.commit()
