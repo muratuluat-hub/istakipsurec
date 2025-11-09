@@ -67,3 +67,18 @@ with tab2:
             st.write("Henüz tamamlanan iş yok.")
         else:
             st.dataframe(done[["Çalışan", "Görev", "Tarih"]], use_container_width=True)
+import streamlit as st
+import db
+from datetime import datetime, timedelta
+
+st.divider()
+st.subheader("🧹 Otomatik Temizlik")
+
+st.write(
+    "Tamamlanmış görevler 30 günden sonra sistemden silinir. "
+    "Bu işlemi manuel olarak da hemen başlatabilirsiniz."
+)
+
+if st.button("🧹 30 Günden Eski Tamamlanan Görevleri Temizle"):
+    db.delete_old_completed_tasks()
+    st.success("30 günden eski tamamlanmış görevler silindi ✅")

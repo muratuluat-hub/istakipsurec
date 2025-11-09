@@ -124,3 +124,25 @@ def delete_employee(name):
     c.execute("DELETE FROM employees WHERE name=?", (name,))
     conn.commit()
     conn.close()
+import sqlite3
+from datetime import datetime, timedelta
+
+def delete_old_completed_tasks(db_name="tasks.db"):
+    try:
+        conn = sqlite3.connect(db_name)
+        c = conn.cursor()
+
+        # 30 günden eski tamamlanmış görevleri sil
+        thirty_days_ago = (datetime.now() - timedelta(days=30)).strftime('%Y-%m-%d')
+        c.execute("""
+            DELETE FROM tasks
+            WHERE status='Tamamlandı' 
+            AND due_date <= ?
+        """, (thirty_days_ago,))
+
+        deleted = c.rowcount
+        conn.commit()
+        conn.close()
+        print(f"🧹 {deleted} eski tamamlanmış görev silindi.")
+    except Exception as e:
+        print(f"🚨 Silme hatası: {e}")
